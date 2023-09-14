@@ -8,6 +8,10 @@ import {getFFmpeg} from "@/lib/ffmpeg";
 import {fetchFile} from "@ffmpeg/util";
 import {api} from "@/lib/axios";
 
+interface VideoInputFormProps  {
+  onVideoUploaded: (id: string) => void;
+}
+
 type Status = 'waiting' | 'converting' | 'uploading' | 'generating' | 'success';
 
 const statusMessages = {
@@ -16,7 +20,7 @@ const statusMessages = {
   uploading: 'Carregando...',
   success: 'Sucesso!!'
 }
-export function VideoInputForm() {
+export function VideoInputForm({onVideoUploaded}: VideoInputFormProps) {
   const [ videoFile, setVideoFile ] = useState<File | null>(null);
   const [status, setStatus] = useState<Status>('waiting');
   const promptInputRef = useRef<HTMLTextAreaElement>(null);
@@ -103,6 +107,7 @@ export function VideoInputForm() {
     });
 
     setStatus('success')
+    onVideoUploaded(id);
   }
 
   // Convert video to audio - []
